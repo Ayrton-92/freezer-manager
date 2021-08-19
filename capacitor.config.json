@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "freezer-manager",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
