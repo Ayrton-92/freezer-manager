@@ -8,6 +8,7 @@ import { FoodService } from '../services/food.service';
 })
 export class Tab1Page implements OnInit {
   form: FormGroup;
+  isLoading = false;
   constructor(private foodService: FoodService) { }
 
   ngOnInit() {
@@ -21,8 +22,14 @@ export class Tab1Page implements OnInit {
     });
   }
   add() {
-    console.log(this.form);
-    this.foodService.addFood(this.form.value);
-    this.form.reset();
+    this.isLoading = true;
+    this.foodService.addFood(this.form.value).then(data => {
+      console.log('data', data);
+      this.isLoading = false;
+      this.form.reset();
+    }).catch(err => {
+      this.isLoading = false;
+      console.error(err);
+    });
   }
 }
