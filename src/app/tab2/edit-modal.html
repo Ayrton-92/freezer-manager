@@ -1,0 +1,46 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title> Edit {{foodItem?.foodName}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-card *ngIf="form">
+        <ion-card-header>
+            <ion-card-title>Edit {{ foodItem?.foodName }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <form [formGroup]="form">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label position="floating">Title</ion-label>
+                                <ion-input type="text" formControlName="foodName"></ion-input>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label position="floating">Date placer dans le frigo</ion-label>
+                                <ion-datetime display-format="YYYY MMMM DD" min="2019-04-01"
+                                    formControlName="datePlacedInFreezer">
+                                </ion-datetime>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <ion-button expand="full" [disabled]="!this.form.valid" (click)="update()">Modifier
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </form>
+        </ion-card-content>
+    </ion-card>
+    <ion-button (click)="goBack()">BACK</ion-button>
+</ion-content>
