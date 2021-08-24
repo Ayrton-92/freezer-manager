@@ -27,9 +27,10 @@ export class Tab2Page implements OnInit, OnDestroy {
       this.allFoodInFreezer = data.map(e => {
         const foodItem = {
           id: e.payload.doc.id,
-          ...e.payload.doc.data() as Food
-        };
-        // console.log('foodItem', foodItem);
+          foodName: (e.payload.doc.data() as any).foodName,
+          // eslint-disable-next-line max-len
+          datePlacedInFreezer: (typeof e.payload.doc.get('datePlacedInFreezer') === 'object') ? e.payload.doc.get('datePlacedInFreezer').toDate() : e.payload.doc.get('datePlacedInFreezer'),
+        } as Food;
         return foodItem;
       });
     }, err => { });

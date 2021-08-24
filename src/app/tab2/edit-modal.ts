@@ -27,7 +27,12 @@ export class EditModal implements OnInit, OnDestroy {
         this.sub = this.foodService.getFood(this.foodId).subscribe(data => {
             this.foodItem = {
                 id: data.payload.id,
-                ...data.payload.data() as Food
+                foodItem: {
+                    foodName: (data.payload.data() as any).foodName,
+                    category: (data.payload.data() as any).category,
+                    // eslint-disable-next-line max-len
+                    datePlacedInFreezer: (typeof data.payload.get('datePlacedInFreezer') === 'object') ? new Date(data.payload.get('datePlacedInFreezer').toDate()).toISOString() : data.payload.get('datePlacedInFreezer'),
+                } as Food
             };
             this.createForm();
 

@@ -29,6 +29,22 @@ export class FoodService {
     return this.afs.collection('freezer').add(foodItem);
   }
 
+  computeMaxDateToKeepFood(category, datePlacedInFreezer) {
+    const securityMarginInDays = 7;
+    const maxStayInFreezerInDays = category.maxStayInFreezerInMonth * 30;
+    const maxStayInFreezerInDaysWithMargin = maxStayInFreezerInDays - securityMarginInDays;
+    // compute finale date
+    const currentDate = new Date(datePlacedInFreezer);
+    const finaleDate = currentDate.setDate(currentDate.getDate() + maxStayInFreezerInDaysWithMargin);
+    return new Date(finaleDate);
+  }
+
+  getFoodToEatBeforeDaysAgo(nbOfDays: number): Observable<Food[]> {
+    const daysInMilliseconds = nbOfDays * 24 * 3600 * 1000;
+    const dateInFuture = new Date(Date.now() + daysInMilliseconds);
+    return this.afs.collection('freezer', ref => ref.where('betterToEatBefore', '<', dateInFuture)).valueChanges() as Observable<Food[]>;
+  }
+
   updateFood(food: Food): Observable<any> {
     return from(this.afs.doc(`freezer/${food.id}`).update(food));
   }

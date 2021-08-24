@@ -31,13 +31,23 @@ export class Tab1Page implements OnInit {
   }
   add() {
     this.isLoading = true;
-    this.foodService.addFood(this.form.value).then(data => {
-      console.log('data', data);
-      this.isLoading = false;
-      this.form.reset();
-    }).catch(err => {
-      this.isLoading = false;
-      console.error(err);
-    });
+    const category = this.allCategories.find(c => c.id === this.form.value.category);
+    const maxDateInFreezer = this.foodService.computeMaxDateToKeepFood(category, this.form.value.datePlacedInFreezer);
+    console.log('maxdate', maxDateInFreezer);
+    const foodItem = {
+      foodName: this.form.value.foodName,
+      category: this.form.value.category,
+      datePlacedInFreezer: new Date(this.form.value.datePlacedInFreezer),
+      betterToEatBefore: maxDateInFreezer
+    };
+    this.foodService.addFood(foodItem)
+      .then(data => {
+        console.log('data', data);
+        this.isLoading = false;
+        this.form.reset();
+      }).catch(err => {
+        this.isLoading = false;
+        console.error(err);
+      });
   }
 }
