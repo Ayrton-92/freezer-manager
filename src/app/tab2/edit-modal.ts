@@ -2,9 +2,11 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import categories from '../shared/food.categories';
+import { Category } from '../interfaces/category.interface';
 
 import { FoodService } from '../services/food.service';
-import { Food } from '../interfaces/food.model';
+import { Food } from '../interfaces/food.interface';
 @Component({
     // eslint-disable-next-line @angular-eslint/component-selector
     selector: 'edit-modal',
@@ -16,10 +18,12 @@ export class EditModal implements OnInit, OnDestroy {
     foodItem: any;
     sub: Subscription;
     form: FormGroup;
+    allCategories: Category[];
 
     // eslint-disable-next-line max-len
     constructor(private foodService: FoodService, private modalCtrl: ModalController, private fb: FormBuilder, private toastCtrl: ToastController) { }
     ngOnInit() {
+        this.allCategories = categories;
         this.sub = this.foodService.getFood(this.foodId).subscribe(data => {
             this.foodItem = {
                 id: data.payload.id,
@@ -42,7 +46,8 @@ export class EditModal implements OnInit, OnDestroy {
             }),
             datePlacedInFreezer: new FormControl(this.foodItem.datePlacedInFreezer, {
                 validators: [Validators.required]
-            })
+            }),
+            category: new FormControl(this.foodItem.category, Validators.required),
         });
     }
 

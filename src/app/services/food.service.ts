@@ -5,7 +5,7 @@ import { DocumentChangeAction } from '@angular/fire/firestore';
 
 import { from, Observable } from 'rxjs';
 
-import { Food } from '../interfaces/food.model';
+import { Food } from '../interfaces/food.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,9 @@ export class FoodService {
   constructor(private afs: AngularFirestore) { }
 
   allFood() {
-    return this.afs.collection('freezer').snapshotChanges();
+    // return this.afs.collection('freezer').snapshotChanges();
+    const freezerCollectionRef = this.afs.collection<Food>('freezer', ref => ref.orderBy('foodName', 'asc'));
+    return freezerCollectionRef.snapshotChanges();
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types

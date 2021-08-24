@@ -4,7 +4,7 @@ import { ModalController, AlertController } from '@ionic/angular';
 import { Subscription, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-import { Food } from '../interfaces/food.model';
+import { Food } from '../interfaces/food.interface';
 import { FoodService } from '../services/food.service';
 import { EditModal } from './edit-modal';
 
