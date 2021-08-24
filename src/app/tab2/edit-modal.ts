@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -17,7 +17,8 @@ export class EditModal implements OnInit, OnDestroy {
     sub: Subscription;
     form: FormGroup;
 
-    constructor(private foodService: FoodService, private modalCtrl: ModalController, private fb: FormBuilder) { }
+    // eslint-disable-next-line max-len
+    constructor(private foodService: FoodService, private modalCtrl: ModalController, private fb: FormBuilder, private toastCtrl: ToastController) { }
     ngOnInit() {
         this.sub = this.foodService.getFood(this.foodId).subscribe(data => {
             this.foodItem = {
@@ -26,7 +27,7 @@ export class EditModal implements OnInit, OnDestroy {
             };
             this.createForm();
 
-            console.log('this.foodItem', this.foodItem);
+            // console.log('this.foodItem', this.foodItem);
         }, err => {
             console.error(err);
 
@@ -48,8 +49,14 @@ export class EditModal implements OnInit, OnDestroy {
     update() {
         console.log(this.form.value);
         const updateFood = { ...this.form.value, id: this.foodItem.id };
-        this.foodService.updateFood(updateFood).subscribe(() => {
-            console.log('updated!');
+        this.foodService.updateFood(updateFood).subscribe(async () => {
+            const toast = await this.toastCtrl.create({
+                message: 'Modification réussi',
+                duration: 2000,
+                color: 'primary',
+                position: 'middle'
+            });
+            toast.present();
         });
     }
 
